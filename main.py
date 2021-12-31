@@ -1,6 +1,6 @@
 import cv2
 import handMediapipe as hm
-
+import time
 
 
 class cvButtons:
@@ -19,10 +19,11 @@ class cvButtons:
 allkeys=[['1','2','3','4','5','6','7','8','9','0'],
     ['q','w',"e","r","t","y","u","i",'o','p'],
     ['a','s','d','f','g','h','j','k','l',';',"'"],
-    ['z','x','c','v','b','n','m','spc']]
+    ['z','x','c','v','b','n','m',' ']]
+
 
 botams=[]
-
+string=''
 
 cap = cv2.VideoCapture(0)
 
@@ -37,7 +38,7 @@ while 1:
     for keys in range(len(allkeys)):
         for i,key in enumerate(allkeys[keys]):
             botams.append(cvButtons(img,(100*i+100,80*keys),key))
-
+    backspace = cvButtons(img,(700,400),'del')    
     landmarks = var.getPosition(img)
 
     if landmarks:
@@ -49,8 +50,21 @@ while 1:
 
                 cv2.rectangle(img,i.position,(i.position[0]+i.GAP,i.position[1]+i.GAP),(255, 255, 0),cv2.FILLED)
                 cv2.putText(img,i.text,(i.position[0]+5,i.position[1]+40 ),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,0),1)
-                print(length)
+                # print(length)
+                string = string + i.text
 
+            x1,y1 = backspace.position
+
+            if x1<landmarks[8][1]<x1+backspace.GAP and  length<40 and  y1<landmarks[8][-1]<y1+backspace.GAP:
+
+                cv2.rectangle(img,backspace.position,(x1+backspace.GAP,y1+backspace.GAP),(255, 255, 0),cv2.FILLED)
+                cv2.putText(img,i.text,(x1+5,y1+40),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,0),1)
+                if string!='':
+                    string = string.rstrip(string[-1])
+
+        
+    # cv2.rectangle(img,(100,600),(700,700),(0,0,0),cv2.FILLED)
+    cv2.putText(img,string,(100+5,600+40),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),0)
     cv2.imshow('op',img)
 
     if cv2.waitKey(1)==27:
