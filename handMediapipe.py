@@ -66,6 +66,11 @@ class handTrack:
     def getPosition(self,image, draw=False):
 
         self.landmarks_list =[]
+        ''' 
+        
+        upon printing this will yield (id,x,y)
+        id represents the hand landmarks number
+        x,y being its respective coordinates '''
         # image=cv2.flip(image, 1)s
 
         if self.results.multi_hand_landmarks:
@@ -73,7 +78,7 @@ class handTrack:
             hat = self.results.multi_hand_landmarks[0]
             for num,lm in enumerate(hat.landmark):
                 h,w,c = image.shape 
-                x,y = int(lm.x*w), int(lm.y*h)
+                x,y = int(lm.x*w), int(lm.y*h) # to change the x,y into pixel dimensions [1280,720] 720p HD
                 self.landmarks_list.append((num,x,y))
                 if draw:
                     cv2.circle(image,(x,y), 15, (21,28,208),cv2.FILLED)

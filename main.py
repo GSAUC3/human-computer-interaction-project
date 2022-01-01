@@ -7,7 +7,7 @@ class cvButtons:
     GAP=60
 
     #  coordinate of the bottom left of the string : for cv2.puttext
-    def __init__(self,image,position: tuple, text: str) -> None:
+    def __init__(self,image,position: tuple, text: str,gap=60) -> None:
         self.position = position
         self.text= text
         cv2.rectangle(image,position,(position[0]+self.GAP,position[1]+self.GAP),(0, 0, 255),cv2.FILLED)
@@ -38,7 +38,9 @@ while 1:
     for keys in range(len(allkeys)):
         for i,key in enumerate(allkeys[keys]):
             botams.append(cvButtons(img,(100*i+100,80*keys),key))
-    backspace = cvButtons(img,(700,400),'del')    
+
+    backspace = cvButtons(img,(700,400),'del') 
+
     landmarks = var.getPosition(img)
 
     if landmarks:
@@ -51,7 +53,9 @@ while 1:
                 cv2.rectangle(img,i.position,(i.position[0]+i.GAP,i.position[1]+i.GAP),(255, 255, 0),cv2.FILLED)
                 cv2.putText(img,i.text,(i.position[0]+5,i.position[1]+40 ),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,0),1)
                 # print(length)
+                # time.sleep(0.0001)
                 string = string + i.text
+                
 
             x1,y1 = backspace.position
 
@@ -79,6 +83,8 @@ cv2.destroyAllWindows()
 
 
 '''
+
+
 0/0---X--->
  |
  |
