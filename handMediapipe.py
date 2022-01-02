@@ -38,6 +38,7 @@ class handTrack:
             detecting for hands, when found it will track it
         draw : set to TRUE to draw the mediapipe hand landmarks
         '''
+
         
         self.maxHands = maxHands
         self.mode = mode
@@ -54,7 +55,7 @@ class handTrack:
 
     def  findHands(self,image):
         rgb_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(rgb_img)
+        self.results = self.hands.process(rgb_img)       
 
         if self.results.multi_hand_landmarks:
             for landmarks in self.results.multi_hand_landmarks:

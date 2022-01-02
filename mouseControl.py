@@ -11,7 +11,7 @@ cap = cv2.VideoCapture(0)
 # cv2.setWindowProperty('op', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 # _, img = cap.read()
 pg.FAILSAFE = False
-var = hm.handTrack(1,min_detection_confidence=0.8,min_tracking_confidence=0.6)
+var = hm.handTrack(1)
 while 1:
     _, img = cap.read()
     img=cv2.flip(img, 1)
@@ -28,6 +28,8 @@ while 1:
 
         x,y = x*4,y*3 # changing the sacle to 1080p HD+
 
+
+
         # print(x,y)
         if x >width and y > height:
             pass 
@@ -38,8 +40,13 @@ while 1:
             # if x >width and y > height:
             #     pass
             pg.click(x,y)
-    
+        len2 = var.dis_btw_2points(4,8)
+        if len2<30:
+            pg.press('enter')  
+            
+
     cv2.imshow('op',img)
+
 
     if cv2.waitKey(1)==27:
         break
@@ -48,3 +55,4 @@ while 1:
 cap.release()
 cv2.destroyAllWindows()
 
+# akgupta5592

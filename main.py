@@ -22,7 +22,7 @@ allkeys=[['1','2','3','4','5','6','7','8','9','0'],
     ['z','x','c','v','b','n','m',' ']]
 
 
-botams=[]
+Buttons=[]
 string=''
 
 cap = cv2.VideoCapture(0)
@@ -37,14 +37,14 @@ while 1:
 
     for keys in range(len(allkeys)):
         for i,key in enumerate(allkeys[keys]):
-            botams.append(cvButtons(img,(100*i+100,80*keys),key))
+            Buttons.append(cvButtons(img,(100*i+100,80*keys),key))
 
     backspace = cvButtons(img,(700,400),'del') 
 
     landmarks = var.getPosition(img)
 
     if landmarks:
-        for i in botams:
+        for i in Buttons:
             x,y = i.position
 
             length = var.dis_btw_2points(8,12)
