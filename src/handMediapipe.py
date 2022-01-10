@@ -1,8 +1,15 @@
 import mediapipe as mp
 import numpy as np
-import cv2
+import cv2,time
 
-
+global past
+past =0
+def frameRate(img):
+    global past    
+    current_time= time.time()
+    FPS = 1/(current_time-past)
+    past = current_time
+    cv2.putText(img,str(int(FPS)),(20,20),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(255,255,0),1 )
 
 
 def to1080p(cap):
@@ -24,6 +31,7 @@ def change_res(cap,width, height):
     # of the output video
 
 class handTrack:
+
     def __init__(self,maxHands=2,mode=False,
               min_detection_confidence=0.5, min_tracking_confidence=0.5,draw=True) -> None:
         '''
@@ -54,6 +62,10 @@ class handTrack:
         
 
     def  findHands(self,image):
+        '''
+        This function will return iamge with landmarks
+        drawn on it'''
+
         rgb_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
         self.results = self.hands.process(rgb_img)       
 
@@ -95,4 +107,47 @@ class handTrack:
         distance = np.sqrt((x1-x2)**2 +(y1-y2)**2)
         return distance
 
+    def findFingers(self):
+        result ={}
+        if self.landmarks_list:
+            a=self.landmarks_list
+            result = {
+            "thumb": [a[1],a[2],a[3],a[4]],
+            "index": [a[5],a[6],a[7],a[8]],
+            "middle": [a[9],a[10],a[11],a[12]],
+            "ring" : [a[13],a[14],a[15],a[16]],
+            "pinky" : [a[17],a[18],a[19],a[20]],
+            "wrist" : a[0]
+            }
+
+        return result
+    
+    def fingersUD(self):
+        '''
+        fingersUD or fingers up down
+        - this function allows us to detect which 
+          finger is open i.e which finger is raised
+        - this function will return a dictionary
+          containing the number of raised fingers
         
+        0 -> indicates finger is NOT raised
+        1 -> indicates finger is raised
+
+        '''
+        result={
+            'thumb':0, 'index':0, 'middle':0, 'ring':0, 'pinky':0
+            }
+        
+        if self.landmarks_list:
+            a=self.findFingers()
+            if a['index'][3][2] < a['index'][1][2]:
+                result['index']=1
+            if a['middle'][3][2] < a['middle'][1][2]:
+                result['middle']=1
+            if a['ring'][3][2] < a['ring'][1][2]:
+                result['ring']=1
+            if a['pinky'][3][2] < a['pinky'][1][2]:
+                result['pinky']=1
+
+        return result
+
