@@ -55,7 +55,7 @@ class handTrack:
 
         self.mpHands = mp.solutions.hands
 
-        self.hands = self.mpHands.Hands(self.mode,self.maxHands,self.mdc,self.mtc)
+        self.hands = self.mpHands.Hands(self.mode,self.maxHands,1,self.mdc,self.mtc)
 
         if draw:
             self.drawHands = mp.solutions.drawing_utils
