@@ -21,12 +21,18 @@ while 1:
     a= var.fingersUD()
     if landmarks:
 
-        _,x,y = landmarks[8] # co ordinates of the index finger (id,x,y)
+        _,x,y = landmarks[4] # co ordinates of the index finger (id,x,y)
 
         x,y = x*4,y*3 # changing the sacle to 1080p HD+
         
         
 
+        janina = var.dis_btw_2points(4,17)
+        print(janina)
+        if janina > 108 and y <240:
+            pg.press("pgup")
+        if janina >108 and y>240:
+            pg.press("pgdn")
 
         print(x,y)
 
@@ -39,10 +45,18 @@ while 1:
                     pg.click(x,y)
 
                     
-            len2 = var.dis_btw_2points(4,8)
+            len2 = var.dis_btw_2points(4,12)
             if len2<30:
                 pg.press('enter')  
             
+
+        elif a['middle']==1 and a['ring']==0:
+            pg.press("pgdn")
+
+        elif a['middle']==0 and a['ring']==1:
+            pg.press("pgup")            
+        
+
         if a['index']==a['thumb']==a['middle']==a['ring']==a['pinky']==0:
             pg.keyDown('alt')
             pg.press('tab',interval=1)

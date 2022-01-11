@@ -12,3 +12,5 @@ This is main python file that will stumulate a virtual keyboard which can be con
 
 #### `mouseControl.py`
 This module will allow us to mimic the mouse operations using hand gestures.  
+
+Euler's formula is remarkable: $e^{i\pi} + 1 = 0$.
