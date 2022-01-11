@@ -21,17 +21,18 @@ while 1:
     a= var.fingersUD()
     if landmarks:
 
-        _,x,y = landmarks[4] # co ordinates of the index finger (id,x,y)
+        _,x0,y0 = landmarks[4] # co ordinates of the tip of thumb (id,x,y)
+        _,x,y = landmarks[8] # co ordinates of the index finger (id,x,y)
 
         x,y = x*4,y*3 # changing the sacle to 1080p HD+
         
         
 
-        janina = var.dis_btw_2points(4,17)
-        print(janina)
-        if janina > 108 and y <240:
+        dis0 = var.dis_btw_2points(4,17)
+        print(dis0)
+        if dis0 > 108 and y0 <240:
             pg.press("pgup")
-        if janina >108 and y>240:
+        if dis0 >108 and y0>240:
             pg.press("pgdn")
 
         print(x,y)
