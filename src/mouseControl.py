@@ -1,10 +1,9 @@
-import cv2
+import cv2, numpy as np
 import handMediapipe as hm
 import pyautogui as pg
 
 width,height = pg.size()
 cap = cv2.VideoCapture(0)
-
 
 pg.FAILSAFE = False
 var = hm.handTrack(1)
@@ -25,14 +24,15 @@ while 1:
         _,x,y = landmarks[8] # co ordinates of the index finger (id,x,y)
 
         x,y = x*4,y*3 # changing the sacle to 1080p HD+
+        
+        
 
 
+        print(x,y)
 
-        # print(a)
         if a['index']==1:
             if x <width and y < height :
                 pg.moveTo(x,y)
-            
             length = var.dis_btw_2points(8,12)
             if length<35:
                 if x <width and y < height:
@@ -49,6 +49,7 @@ while 1:
         else:
             pg.keyUp('alt')
 
+        
     cv2.imshow('op',img)
 
 
