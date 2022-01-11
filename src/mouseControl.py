@@ -69,12 +69,6 @@ while 1:
             pg.hotkey('win','tab')
         
 
-        if a['middle']==1 and a['ring']==0:
-            pg.press("pgdn")
-
-        if a['middle']==0 and a['ring']==1:
-            pg.press("pgup")            
-
         dis0 = var.dis_btw_2points(4,17)
         if dis0 > 108 and y0 <halfHeight:
             pg.press("pgup")
