@@ -55,7 +55,7 @@ class handTrack:
 
         self.mpHands = mp.solutions.hands
 
-        self.hands = self.mpHands.Hands(self.mode,self.maxHands,1,self.mdc,self.mtc)
+        self.hands = self.mpHands.Hands(self.mode,self.maxHands,self.mdc,self.mtc)
 
         if draw:
             self.drawHands = mp.solutions.drawing_utils
@@ -78,6 +78,7 @@ class handTrack:
 
     def getPosition(self,image, draw=False):
 
+        result ={}
         self.landmarks_list =[]
         ''' 
         
@@ -95,7 +96,20 @@ class handTrack:
                 self.landmarks_list.append((num,x,y))
                 if draw:
                     cv2.circle(image,(x,y), 15, (21,28,208),cv2.FILLED)
-        return self.landmarks_list
+
+        if self.landmarks_list:    
+            a=self.landmarks_list
+            result = {
+                "thumb": [a[1],a[2],a[3],a[4]],
+                "index": [a[5],a[6],a[7],a[8]],
+                "middle": [a[9],a[10],a[11],a[12]],
+                "ring" : [a[13],a[14],a[15],a[16]],
+                "pinky" : [a[17],a[18],a[19],a[20]],
+                "wrist" : a[0]
+                }
+
+        
+        return result
 
     def dis_btw_2points(self,landmark1,landmark2):
         """
@@ -107,22 +121,8 @@ class handTrack:
         distance = np.sqrt((x1-x2)**2 +(y1-y2)**2)
         return distance
 
-    def findFingers(self):
-        result ={}
-        if self.landmarks_list:
-            a=self.landmarks_list
-            result = {
-            "thumb": [a[1],a[2],a[3],a[4]],
-            "index": [a[5],a[6],a[7],a[8]],
-            "middle": [a[9],a[10],a[11],a[12]],
-            "ring" : [a[13],a[14],a[15],a[16]],
-            "pinky" : [a[17],a[18],a[19],a[20]],
-            "wrist" : a[0]
-            }
-
-        return result
     
-    def fingersUD(self):
+    def fingersUD(self,img):
         '''
         fingersUD or fingers up down
         - this function allows us to detect which 
@@ -132,14 +132,13 @@ class handTrack:
         
         0 -> indicates finger is NOT raised
         1 -> indicates finger is raised
-
         '''
         result={
             'thumb':0, 'index':0, 'middle':0, 'ring':0, 'pinky':0
             }
         
-        if self.landmarks_list:
-            a=self.findFingers()
+        a=self.getPosition(img)
+        if a:
             if a['index'][3][2] < a['index'][1][2]:
                 result['index']=1
             if a['middle'][3][2] < a['middle'][1][2]:
@@ -148,6 +147,20 @@ class handTrack:
                 result['ring']=1
             if a['pinky'][3][2] < a['pinky'][1][2]:
                 result['pinky']=1
+            if a['thumb'][0][1] > a['thumb'][3][1]:
+                result['thumb']=1
 
-        return result
+        return result,a
 
+
+'''
+{
+    'thumb': [(1, 357, 366), (2, 318, 343), (3, 286, 328), (4, 256, 329)], 
+    'index': [(5, 351, 273), (6, 340, 234), (7, 334, 211), (8, 329, 190)], 
+    'middle': [(9, 377, 267), (10, 376, 221), (11, 375, 194), (12, 374, 169)],
+    'ring': [(13, 402, 271), (14, 405, 229), (15, 407, 203), (16, 407, 181)],
+    'pinky': [(17, 426, 284), (18, 442, 254), (19, 453, 236), (20, 462, 216)], 
+    'wrist': (0, 397, 378)
+}
+
+'''
