@@ -61,45 +61,33 @@ class handTrack:
             self.drawHands = mp.solutions.drawing_utils
         
 
-    def  findHands(self,image):
-        '''
-        This function will return iamge with landmarks
-        drawn on it'''
-
-        rgb_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(rgb_img)       
-
-        if self.results.multi_hand_landmarks:
-            for landmarks in self.results.multi_hand_landmarks:
-                self.drawHands.draw_landmarks(image,landmarks,
-                        self.mpHands.HAND_CONNECTIONS)
-        # return  cv2.flip(image, 1)
-        return  image
-
-    def getPosition(self,image, draw=False):
-
-        result ={}
-        self.landmarks_list =[]
+    def Handinfo(self,image, draw=True):
         ''' 
-        
         upon printing this will yield (id,x,y)
         id represents the hand landmarks number
         x,y being its respective coordinates '''
-        # image=cv2.flip(image, 1)s
 
+        info ={}
+        self.landmarks_list =[]
+        rgb_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+        self.results = self.hands.process(rgb_img)       
+        
         if self.results.multi_hand_landmarks:
             
             hat = self.results.multi_hand_landmarks[0]
             for num,lm in enumerate(hat.landmark):
                 h,w,c = image.shape 
                 x,y = int(lm.x*w), int(lm.y*h) # to change the x,y into pixel dimensions [1280,720] 720p HD
-                self.landmarks_list.append((num,x,y))
-                if draw:
-                    cv2.circle(image,(x,y), 15, (21,28,208),cv2.FILLED)
+                self.landmarks_list.append((num,x,y))           
 
+            if draw:
+                for landmarks in self.results.multi_hand_landmarks:
+                    self.drawHands.draw_landmarks(image,landmarks,
+                            self.mpHands.HAND_CONNECTIONS)
+        
         if self.landmarks_list:    
             a=self.landmarks_list
-            result = {
+            info = {
                 "thumb": [a[1],a[2],a[3],a[4]],
                 "index": [a[5],a[6],a[7],a[8]],
                 "middle": [a[9],a[10],a[11],a[12]],
@@ -109,7 +97,7 @@ class handTrack:
                 }
 
         
-        return result
+        return info,image
 
     def dis_btw_2points(self,landmark1,landmark2):
         """
@@ -122,7 +110,7 @@ class handTrack:
         return distance
 
     
-    def fingersUD(self,img):
+    def fingersUD(self,img,draw=True):
         '''
         fingersUD or fingers up down
         - this function allows us to detect which 
@@ -137,7 +125,7 @@ class handTrack:
             'thumb':0, 'index':0, 'middle':0, 'ring':0, 'pinky':0
             }
         
-        a=self.getPosition(img)
+        a,image=self.Handinfo(img,draw)
         if a:
             if a['index'][3][2] < a['index'][1][2]:
                 result['index']=1
@@ -150,7 +138,7 @@ class handTrack:
             if a['thumb'][0][1] > a['thumb'][3][1]:
                 result['thumb']=1
 
-        return result,a
+        return result,a,image
 
 
 '''
