@@ -13,21 +13,20 @@ halfHeight = vh>>1
 cx=px=cy=py=0
 FACTOR = 30
 ORIGIN = (80,10)
-SMOOTHIE = 1.75
+SMOOTHIE = 2
 
 pg.FAILSAFE = False
 var = hm.handTrack(1)
 while 1:
     _, img = cap.read()
     img=cv2.flip(img, 1)
-    img = var.findHands(img)
 
     hm.frameRate(img)
         
     cv2.line(img,(0,halfHeight),(vw,halfHeight),(0, 255, 38),1)
     cv2.line(img,(vw>>1,0),(vw>>1,vh),(0, 255, 38),1)
 
-    a,landmarks = var.fingersUD(img)
+    a,landmarks,img = var.fingersUD(img)
     if landmarks:
 
         # print(a)
@@ -51,35 +50,23 @@ while 1:
             cv2.rectangle(img,ORIGIN,(ORIGIN[0]+16*FACTOR,ORIGIN[1]+9*FACTOR),(0,255,255),4)
             if x <width and y < height :
                 pg.moveTo(cx,cy)
-            length = var.dis_btw_2points(8,12)
-            if length<35:
-                if x <width and y < height:
+
+            if a['index'] ==1 and a['middle']==0 and a['ring']==1:
                     pg.click(cx,cy)
+            elif a['index'] ==1 and a['middle']==1 and a['ring']==0:
+                    pg.click(cx,cy,button='right')
+                
 
             px,py = cx, cy           
-        #     len2 = var.dis_btw_2points(4,12)
-        #     if len2<30:
-        #         pg.press('enter')  
+
             
         
 
-        elif a['index']==a['thumb']==a['middle']==a['ring']==a['pinky']==0:
-            # pg.keyDown('alt')
-            # pg.press('tab',interval=1)
+        if a['index']==a['thumb']==a['middle']==a['ring']==a['pinky']==0:
             pg.hotkey('win','tab')
         
 
-        if a['middle']==1 and a['ring']==0:
-            pg.press("pgdn")
-
-        if a['middle']==0 and a['ring']==1:
-            pg.press("pgup")            
-
-        dis0 = var.dis_btw_2points(4,17)
-        if dis0 > 108 and y0 <halfHeight:
-            pg.press("pgup")
-        if dis0 >108 and y0>halfHeight:
-            pg.press("pgdn")
+        
         
     cv2.imshow('op',img)
 
@@ -90,4 +77,3 @@ while 1:
 
 cap.release()
 cv2.destroyAllWindows()
-
