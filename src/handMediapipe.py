@@ -77,7 +77,7 @@ class handTrack:
             hat = self.results.multi_hand_landmarks[0]
             for num,lm in enumerate(hat.landmark):
                 h,w,c = image.shape 
-                x,y,z = int(lm.x*w), int(lm.y*h),lm.z # to change the x,y into pixel dimensions [1280,720] 720p HD
+                x,y,z = int(lm.x*w), int(lm.y*h),int(lm.z*w) # to change the x,y into pixel dimensions [1280,720] 720p HD
                 self.landmarks_list.append((num,x,y,z))           
 
             if draw:
