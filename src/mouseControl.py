@@ -31,9 +31,9 @@ while 1:
 
         # print(a)
 
-        _,x,y,z = landmarks['index'][2]
+        _,x,y,z = landmarks['index'][3]
 
-        _,x0,y0,z0 = landmarks['thumb'][2]
+        _,x0,y0,z0 = landmarks['thumb'][3]
 
         # changing the sacle to 1080p HD+
         x= np.interp(x,(ORIGIN[0],ORIGIN[0]+16*FACTOR),(0,1920))
@@ -52,9 +52,9 @@ while 1:
                 pg.moveTo(cx,cy)
 
             if a['thumb']==0 and a['middle']==1 and a['ring']==1:
-                pg.scroll(-100)
+                pg.scroll(-200)
             elif a['thumb']==0 and a['middle']==1 and a['ring']==0:
-                pg.scroll(100)
+                pg.scroll(200)
             elif a['thumb']==1 and a['middle']==0 and a['ring']==1:
                     pg.click(cx,cy)
             elif a['thumb']==1 and a['middle']==1 and a['ring']==0:

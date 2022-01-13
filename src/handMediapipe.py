@@ -67,7 +67,7 @@ class handTrack:
         id represents the hand landmarks number
         x,y being its respective coordinates '''
 
-        info ={}
+        info ={} 
         self.landmarks_list =[]
         rgb_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
         self.results = self.hands.process(rgb_img)       
@@ -94,7 +94,7 @@ class handTrack:
                 "ring" : [a[13],a[14],a[15],a[16]],
                 "pinky" : [a[17],a[18],a[19],a[20]],
                 "wrist" : a[0]
-                }
+                     }
 
         
         return info,image
@@ -141,14 +141,3 @@ class handTrack:
         return result,a,image
 
 
-'''
-{
-    'thumb': [(1, 357, 366), (2, 318, 343), (3, 286, 328), (4, 256, 329)], 
-    'index': [(5, 351, 273), (6, 340, 234), (7, 334, 211), (8, 329, 190)], 
-    'middle': [(9, 377, 267), (10, 376, 221), (11, 375, 194), (12, 374, 169)],
-    'ring': [(13, 402, 271), (14, 405, 229), (15, 407, 203), (16, 407, 181)],
-    'pinky': [(17, 426, 284), (18, 442, 254), (19, 453, 236), (20, 462, 216)], 
-    'wrist': (0, 397, 378)
-}
-
-'''
