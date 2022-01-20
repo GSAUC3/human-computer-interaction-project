@@ -77,8 +77,8 @@ class handTrack:
             hat = self.results.multi_hand_landmarks[0]
             for num,lm in enumerate(hat.landmark):
                 h,w,c = image.shape 
-                x,y = int(lm.x*w), int(lm.y*h) # to change the x,y into pixel dimensions [1280,720] 720p HD
-                self.landmarks_list.append((num,x,y))           
+                x,y,z = int(lm.x*w), int(lm.y*h), int(lm.z*w) # to change the x,y into pixel dimensions [1280,720] 720p HD
+                self.landmarks_list.append((num,x,y,z))           
 
             if draw:
                 for landmarks in self.results.multi_hand_landmarks:
@@ -104,8 +104,8 @@ class handTrack:
         landmark1 : 1st landmark number according to mediapipe
         landmark2 : 2nd landmark number according to mediapipe
         """
-        _,x1,y1 = self.landmarks_list[landmark1] 
-        _,x2,y2 = self.landmarks_list[landmark2] 
+        _,x1,y1,_ = self.landmarks_list[landmark1] 
+        _,x2,y2,_ = self.landmarks_list[landmark2] 
         distance = np.sqrt((x1-x2)**2 +(y1-y2)**2)
         return distance
 
