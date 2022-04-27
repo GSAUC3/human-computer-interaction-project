@@ -2,3 +2,5 @@ src/__pycache__
 src/onScreenKeyboard.py
 src/LOL
 src/lol1.py
+dataset/
+archive.zip
