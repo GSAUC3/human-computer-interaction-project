@@ -138,8 +138,16 @@ class handTrack:
                 result['ring']=1
             if a['pinky'][3][2] < a['pinky'][1][2]:
                 result['pinky']=1
-            if a['thumb'][0][1] > a['thumb'][3][1]:
-                result['thumb']=1
+            
+            #if left hand
+            if a['index'][0][1] > a['pinky'][0][1]:
+                if a['thumb'][0][1] < a['thumb'][3][1]:
+                    result['thumb']=1
+
+            #if right hand
+            elif a['index'][0][1] < a['pinky'][0][1]:
+                if a['thumb'][0][1] > a['thumb'][3][1]:
+                    result['thumb']=1
 
         return result,a,image
 
