@@ -1,4 +1,7 @@
-src/_pycache_
+src/__pycache__
 src/onScreenKeyboard.py
 src/LOL
 src/lol1.py
+src/test.ipynb
+dataset/
+archive.zip

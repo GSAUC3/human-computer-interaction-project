@@ -61,24 +61,27 @@ class handTrack:
             self.drawHands = mp.solutions.drawing_utils
         
 
-    def Handinfo(self,image, draw=True):
+    def Handinfo(self,image,is_RGB=True, draw=True):
         ''' 
         upon printing this will yield (id,x,y)
         id represents the hand landmarks number
         x,y being its respective coordinates '''
 
-        info ={}
+        info ={} 
         self.landmarks_list =[]
-        rgb_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(rgb_img)       
+        if is_RGB:
+            self.results = self.hands.process(image)       
+        else:
+            image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+            self.results = self.hands.process(image)       
         
         if self.results.multi_hand_landmarks:
             
             hat = self.results.multi_hand_landmarks[0]
             for num,lm in enumerate(hat.landmark):
                 h,w,c = image.shape 
-                x,y = int(lm.x*w), int(lm.y*h) # to change the x,y into pixel dimensions [1280,720] 720p HD
-                self.landmarks_list.append((num,x,y))           
+                x,y,z = int(lm.x*w), int(lm.y*h),int(lm.z*w) # to change the x,y into pixel dimensions [1280,720] 720p HD
+                self.landmarks_list.append((num,x,y,z))           
 
             if draw:
                 for landmarks in self.results.multi_hand_landmarks:
@@ -94,7 +97,7 @@ class handTrack:
                 "ring" : [a[13],a[14],a[15],a[16]],
                 "pinky" : [a[17],a[18],a[19],a[20]],
                 "wrist" : a[0]
-                }
+                     }
 
         
         return info,image
@@ -104,13 +107,13 @@ class handTrack:
         landmark1 : 1st landmark number according to mediapipe
         landmark2 : 2nd landmark number according to mediapipe
         """
-        _,x1,y1 = self.landmarks_list[landmark1] 
-        _,x2,y2 = self.landmarks_list[landmark2] 
+        _,x1,y1,z1 = self.landmarks_list[landmark1] 
+        _,x2,y2,z2 = self.landmarks_list[landmark2] 
         distance = np.sqrt((x1-x2)**2 +(y1-y2)**2)
         return distance
 
     
-    def fingersUD(self,img,draw=True):
+    def fingersUD(self,img,is_rgb=False,draw=True):
         '''
         fingersUD or fingers up down
         - this function allows us to detect which 
@@ -125,7 +128,7 @@ class handTrack:
             'thumb':0, 'index':0, 'middle':0, 'ring':0, 'pinky':0
             }
         
-        a,image=self.Handinfo(img,draw)
+        a,image=self.Handinfo(img,is_rgb,draw)
         if a:
             if a['index'][3][2] < a['index'][1][2]:
                 result['index']=1
@@ -141,14 +144,3 @@ class handTrack:
         return result,a,image
 
 
-'''
-{
-    'thumb': [(1, 357, 366), (2, 318, 343), (3, 286, 328), (4, 256, 329)], 
-    'index': [(5, 351, 273), (6, 340, 234), (7, 334, 211), (8, 329, 190)], 
-    'middle': [(9, 377, 267), (10, 376, 221), (11, 375, 194), (12, 374, 169)],
-    'ring': [(13, 402, 271), (14, 405, 229), (15, 407, 203), (16, 407, 181)],
-    'pinky': [(17, 426, 284), (18, 442, 254), (19, 453, 236), (20, 462, 216)], 
-    'wrist': (0, 397, 378)
-}
-
-'''
