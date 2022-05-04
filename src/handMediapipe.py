@@ -61,7 +61,7 @@ class handTrack:
             self.drawHands = mp.solutions.drawing_utils
         
 
-    def Handinfo(self,image, draw=True):
+    def Handinfo(self,image,is_RGB=True, draw=True):
         ''' 
         upon printing this will yield (id,x,y)
         id represents the hand landmarks number
@@ -69,8 +69,11 @@ class handTrack:
 
         info ={} 
         self.landmarks_list =[]
-        rgb_img = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(rgb_img)       
+        if is_RGB:
+            self.results = self.hands.process(image)       
+        else:
+            image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+            self.results = self.hands.process(image)       
         
         if self.results.multi_hand_landmarks:
             
@@ -110,7 +113,7 @@ class handTrack:
         return distance
 
     
-    def fingersUD(self,img,draw=True):
+    def fingersUD(self,img,is_rgb=False,draw=True):
         '''
         fingersUD or fingers up down
         - this function allows us to detect which 
@@ -125,7 +128,7 @@ class handTrack:
             'thumb':0, 'index':0, 'middle':0, 'ring':0, 'pinky':0
             }
         
-        a,image=self.Handinfo(img,draw)
+        a,image=self.Handinfo(img,is_rgb,draw)
         if a:
             if a['index'][3][2] < a['index'][1][2]:
                 result['index']=1

@@ -74,7 +74,7 @@ while 1:
         if a['thumb']==a['pinky']==1 and a['index']==a['middle']==a['ring']==0:
             pg.hotkey('win','tab')
         
-    cv2.imshow('op',img)
+    cv2.imshow('op',cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
 
     if cv2.waitKey(1)==27:
         break
