@@ -1,5 +1,6 @@
 # Human Computer Interaction (HCI) Project
 
+This project was done in association with C-DAC (Centre for Development of Advanced Computing), India.
 An application build entirely in python to control all the mouse functionalities using hand gestures.
 A short demo is given below. 
 
